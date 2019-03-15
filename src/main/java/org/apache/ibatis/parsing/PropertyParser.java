@@ -56,6 +56,12 @@ public class PropertyParser {
     return parser.parse(string);
   }
 
+  /**
+   * 将变量替换为属性值,如果没有则返回默认值或者  ${key}
+   * 如:key1 返回 value1
+   *   key1:default_value1 返回 default_value1
+   *   key1   返回    ${key}
+   */
   private static class VariableTokenHandler implements TokenHandler {
     private final Properties variables;
     private final boolean enableDefaultValue;

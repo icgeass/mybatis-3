@@ -30,6 +30,14 @@ public class GenericTokenParser {
     this.handler = handler;
   }
 
+
+  /**
+   * 将长文本中的若干属性替换为对应值,属性用${}包裹起来
+   * 详细见
+   * org.apache.ibatis.parsing.GenericTokenParserTest
+   * @param text
+   * @return
+   */
   public String parse(String text) {
     if (text == null || text.isEmpty()) {
       return "";
