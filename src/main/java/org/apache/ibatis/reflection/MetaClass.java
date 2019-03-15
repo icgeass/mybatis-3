@@ -28,6 +28,12 @@ import org.apache.ibatis.reflection.property.PropertyTokenizer;
 
 /**
  * @author Clinton Begin
+ *
+ *
+ * MetaClass封装Reflector
+ * Reflector获取的一个类的相关信息,而MetaClass可以根据PropertyTokenizer字符串获取字段的类型信息
+ *
+ *
  */
 public class MetaClass {
 

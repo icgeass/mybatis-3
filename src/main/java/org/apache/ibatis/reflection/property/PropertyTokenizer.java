@@ -21,6 +21,24 @@ import java.util.Iterator;
  * @author Clinton Begin
  */
 public class PropertyTokenizer implements Iterator<PropertyTokenizer> {
+
+
+  /**
+   * 例如:
+   * orders[0].items[0].name
+   *
+   * 用.分割
+   *
+   * 如果第一个.
+   * 则
+   * name----orders
+   * indexedNmae-----orders[0]
+   * index------0
+   * children--------item[0].name
+   *
+   * 而children可以进入下一次分割
+   * 最后一次分割,name和indexedName相等
+   */
   private String name;
   private final String indexedName;
   private String index;

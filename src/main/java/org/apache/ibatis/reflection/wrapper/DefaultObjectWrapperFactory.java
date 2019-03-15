@@ -20,6 +20,8 @@ import org.apache.ibatis.reflection.ReflectionException;
 
 /**
  * @author Clinton Begin
+ *
+ * 目前没有实现
  */
 public class DefaultObjectWrapperFactory implements ObjectWrapperFactory {
 

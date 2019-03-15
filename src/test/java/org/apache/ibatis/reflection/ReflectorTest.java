@@ -69,6 +69,7 @@ public class ReflectorTest {
   }
 
   static class Section extends AbstractEntity implements Entity<Long> {
+
   }
 
   @Test
