@@ -138,6 +138,10 @@ public class TypeAliasRegistry {
     }
   }
 
+  /**
+   * 解析类注解指定的别名
+   * @param type
+   */
   public void registerAlias(Class<?> type) {
     String alias = type.getSimpleName();
     Alias aliasAnnotation = type.getAnnotation(Alias.class);

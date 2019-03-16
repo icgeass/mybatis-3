@@ -22,6 +22,12 @@ import java.sql.SQLException;
 
 /**
  * @author Clinton Begin
+ *
+ * 设置PreparedStatement参数和从ResultSet获取值
+ *
+ * 由于不同类型设置和获取值有所差异,并且返回也不一样,
+ * 所以提供统一对外接口屏蔽内部实现
+ *
  */
 public interface TypeHandler<T> {
 
