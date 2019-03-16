@@ -196,13 +196,35 @@ public class UnpooledDataSource implements DataSource {
     return doGetConnection(props);
   }
 
+
+  /**
+   * 获得连接
+   * @param properties
+   * @return
+   * @throws SQLException
+   */
   private Connection doGetConnection(Properties properties) throws SQLException {
+    /**
+     * 注册驱动,并且放入已注册的驱动map
+     */
     initializeDriver();
+
+    /**
+     * 获取连接
+     */
     Connection connection = DriverManager.getConnection(url, properties);
+
+    /**
+     * 配置连接
+     */
     configureConnection(connection);
     return connection;
   }
 
+
+  /**
+   * @throws SQLException
+   */
   private synchronized void initializeDriver() throws SQLException {
     if (!registeredDrivers.containsKey(driver)) {
       Class<?> driverType;

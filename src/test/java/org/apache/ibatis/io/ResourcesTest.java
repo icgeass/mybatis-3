@@ -40,6 +40,17 @@ public class ResourcesTest extends BaseDataTest {
     assertTrue(url.toString().endsWith("jpetstore/jpetstore-hsqldb.properties"));
   }
 
+
+  @Test
+  public void testGetProperties() throws Exception{
+    String s = "org/apache/ibatis/io/test.properties";
+    Properties properties = Resources.getResourceAsProperties("org/apache/ibatis/io/test.properties");
+    System.out.println(properties);
+
+
+    System.out.println(Resources.getResourceAsFile(s).getAbsolutePath());
+  }
+
   @Test
   public void shouldGetUrlAsProperties() throws Exception {
     URL url = Resources.getResourceURL(CLASS_LOADER, JPETSTORE_PROPERTIES);
