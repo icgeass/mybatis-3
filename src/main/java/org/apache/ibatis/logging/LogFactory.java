@@ -20,6 +20,11 @@ import java.lang.reflect.Constructor;
 /**
  * @author Clinton Begin
  * @author Eduardo Macarron
+ *
+ * 依次检测日志实现,将第一个可用的日志加入logConstructor静态字段,提供日志服务
+ *
+ * 构造器所对应的类为org.apache.ibatis.logging.Log的实现
+ *
  */
 public final class LogFactory {
 

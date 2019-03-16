@@ -34,18 +34,32 @@ import org.apache.ibatis.reflection.ArrayUtil;
  * 
  * @author Clinton Begin
  * @author Eduardo Macarron
+ *
+ *
+ * 记录需要代理的方法名,当执行指定方法名时打印相关日志
+ *
+ *
  */
 public abstract class BaseJdbcLogger {
 
   protected static final Set<String> SET_METHODS = new HashSet<String>();
   protected static final Set<String> EXECUTE_METHODS = new HashSet<String>();
 
+  /**
+   * 记录了PreparedStatement.set*()方法设置的键值对
+   */
   private final Map<Object, Object> columnMap = new HashMap<Object, Object>();
 
   private final List<Object> columnNames = new ArrayList<Object>();
   private final List<Object> columnValues = new ArrayList<Object>();
 
+  /**
+   * //用于输出日志的Log对象
+   */
   protected Log statementLog;
+  /**
+   * /记录了SQL的层数,用于格式化输出SQL
+   */
   protected int queryStack;
 
   /*
