@@ -130,6 +130,9 @@ public class ParamNameResolver {
         // add generic param names (param1, param2, ...)
         final String genericParamName = GENERIC_NAME_PREFIX + String.valueOf(i + 1);
         // ensure not to overwrite parameter named with @Param
+        /**
+         * @Param 指定的名称就是param1 ，则不需要添加
+         */
         if (!names.containsValue(genericParamName)) {
           param.put(genericParamName, args[entry.getKey()]);
         }
