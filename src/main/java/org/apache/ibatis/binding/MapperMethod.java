@@ -42,7 +42,16 @@ import java.util.*;
  */
 public class MapperMethod {
 
+  /**
+   * 记录了SQL语句的名称和类
+   * 型
+   */
   private final SqlCommand command;
+
+  /**
+   * Mapper接口中对应方法的相
+   * 关信息
+   */
   private final MethodSignature method;
 
   public MapperMethod(Class<?> mapperInterface, Method method, Configuration config) {
@@ -50,6 +59,14 @@ public class MapperMethod {
     this.method = new MethodSignature(config, mapperInterface, method);
   }
 
+
+  /**
+   * sqlSession执行
+   * 然后处理结果
+   * @param sqlSession
+   * @param args
+   * @return
+   */
   public Object execute(SqlSession sqlSession, Object[] args) {
     Object result;
     switch (command.getType()) {
@@ -210,12 +227,19 @@ public class MapperMethod {
 
   public static class SqlCommand {
 
+    /**
+     * sqlId
+     */
     private final String name;
+    /**
+     * SQL类型
+     */
     private final SqlCommandType type;
 
     public SqlCommand(Configuration configuration, Class<?> mapperInterface, Method method) {
       final String methodName = method.getName();
       final Class<?> declaringClass = method.getDeclaringClass();
+
       MappedStatement ms = resolveMappedStatement(mapperInterface, methodName, declaringClass,
           configuration);
       if (ms == null) {
@@ -249,7 +273,7 @@ public class MapperMethod {
       if (configuration.hasStatement(statementId)) {
         return configuration.getMappedStatement(statementId);
       } else if (mapperInterface.equals(declaringClass)) {
-        return null;
+        return null; // ？？？
       }
       for (Class<?> superInterface : mapperInterface.getInterfaces()) {
         if (declaringClass.isAssignableFrom(superInterface)) {
@@ -295,6 +319,14 @@ public class MapperMethod {
       this.paramNameResolver = new ParamNameResolver(configuration, method);
     }
 
+
+    /**
+     * 这个方法比较重要，涉及sql执行时候得传参数
+     *
+     * https://blog.csdn.net/isea533/article/details/44002219
+     * @param args
+     * @return
+     */
     public Object convertArgsToSqlCommandParam(Object[] args) {
       return paramNameResolver.getNamedParams(args);
     }
@@ -339,6 +371,15 @@ public class MapperMethod {
       return returnsCursor;
     }
 
+
+    /**
+     * 查找制定类型的
+     * 参数在参数列表中的下标
+     *
+     * @param method
+     * @param paramType
+     * @return
+     */
     private Integer getUniqueParamIndex(Method method, Class<?> paramType) {
       Integer index = null;
       final Class<?>[] argTypes = method.getParameterTypes();
@@ -354,6 +395,14 @@ public class MapperMethod {
       return index;
     }
 
+
+    /**
+     * 获得method上的MapKey注解
+     *
+     *
+     * @param method
+     * @return
+     */
     private String getMapKey(Method method) {
       String mapKey = null;
       if (Map.class.isAssignableFrom(method.getReturnType())) {

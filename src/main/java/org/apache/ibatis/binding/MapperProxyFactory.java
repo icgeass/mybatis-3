@@ -24,6 +24,10 @@ import org.apache.ibatis.session.SqlSession;
 
 /**
  * @author Lasse Voss
+ *
+ * 一个Mapper接口
+ * 对应多个
+ * Method-----MapperMethod的键值对
  */
 public class MapperProxyFactory<T> {
 

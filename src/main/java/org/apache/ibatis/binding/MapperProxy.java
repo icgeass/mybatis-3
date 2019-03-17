@@ -30,6 +30,13 @@ import org.apache.ibatis.session.SqlSession;
 /**
  * @author Clinton Begin
  * @author Eduardo Macarron
+ *
+ * InvocationHandler，用于代理执行
+ *
+ * 一般的代理会在invoke中调用实际被代理的对象realObject（构造传入），但是MapperProxy没有，
+ * 因为用户定义的Mapper接口本来就没有实现类
+ *
+ * MapperProxy使用动态代理仅仅是为了
  */
 public class MapperProxy<T> implements InvocationHandler, Serializable {
 
@@ -55,6 +62,12 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     } catch (Throwable t) {
       throw ExceptionUtil.unwrapThrowable(t);
     }
+    /**
+     * 创建并缓存MapperMethod
+     *
+     * methodCache是MapperProxyFactory创建MapperProxy传入的，
+     * 一个Mapper接口只有一个MapperProxyFactory，所以也只有一个methodCache
+     */
     final MapperMethod mapperMethod = cachedMapperMethod(method);
     return mapperMethod.execute(sqlSession, args);
   }

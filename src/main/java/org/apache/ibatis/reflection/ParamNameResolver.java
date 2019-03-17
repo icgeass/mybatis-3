@@ -34,6 +34,8 @@ public class ParamNameResolver {
   private static final String GENERIC_NAME_PREFIX = "param";
 
   /**
+   *
+   * 英文注释已经说得很清楚了
    * <p>
    * The key is the index and the value is the name of the parameter.<br />
    * The name is obtained from {@link Param} if specified. When {@link Param} is not specified,
@@ -110,6 +112,9 @@ public class ParamNameResolver {
    * In addition to the default names, this method also adds the generic names (param1, param2,
    * ...).
    * </p>
+   *
+   * 接收的参数是用户传入的实参列表，并将实参与其对应名
+   * 称进行关联
    */
   public Object getNamedParams(Object[] args) {
     final int paramCount = names.size();

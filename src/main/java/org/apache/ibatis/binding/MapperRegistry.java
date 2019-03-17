@@ -30,6 +30,11 @@ import java.util.Set;
  * @author Clinton Begin
  * @author Eduardo Macarron
  * @author Lasse Voss
+ *
+ *
+ * 一个Mapper接口------一个MapperProxyFactory
+ *
+ *
  */
 public class MapperRegistry {
 
@@ -40,6 +45,14 @@ public class MapperRegistry {
     this.config = config;
   }
 
+
+  /**
+   * 传入了SqlSession
+   * @param type
+   * @param sqlSession
+   * @param <T>
+   * @return
+   */
   @SuppressWarnings("unchecked")
   public <T> T getMapper(Class<T> type, SqlSession sqlSession) {
     final MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) knownMappers.get(type);
@@ -57,6 +70,13 @@ public class MapperRegistry {
     return knownMappers.containsKey(type);
   }
 
+
+  /**
+   * 添加
+   * Mapper----Mapper代理工厂
+   * @param type
+   * @param <T>
+   */
   public <T> void addMapper(Class<T> type) {
     if (type.isInterface()) {
       if (hasMapper(type)) {
