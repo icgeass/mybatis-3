@@ -91,6 +91,10 @@ public class XMLConfigBuilder extends BaseBuilder {
     this.parser = parser;
   }
 
+  /**
+   * 解析mybatis-config.xml
+   * @return
+   */
   public Configuration parse() {
     if (parsed) {
       throw new BuilderException("Each XMLConfigBuilder can only be used once.");
@@ -105,23 +109,63 @@ public class XMLConfigBuilder extends BaseBuilder {
       //issue #117 read properties first
       propertiesElement(root.evalNode("properties"));
       Properties settings = settingsAsProperties(root.evalNode("settings"));
+      /**
+       * 加载自定义VFS实现,该配置很少用到
+       */
       loadCustomVfs(settings);
+
+
       typeAliasesElement(root.evalNode("typeAliases"));
+
+
       pluginElement(root.evalNode("plugins"));
+
+
+      /**
+       * 默认的就满足了,很少用到
+       */
       objectFactoryElement(root.evalNode("objectFactory"));
       objectWrapperFactoryElement(root.evalNode("objectWrapperFactory"));
       reflectorFactoryElement(root.evalNode("reflectorFactory"));
+
+      ////
       settingsElement(settings);
       // read it after objectFactory and objectWrapperFactory issue #631
       environmentsElement(root.evalNode("environments"));
       databaseIdProviderElement(root.evalNode("databaseIdProvider"));
       typeHandlerElement(root.evalNode("typeHandlers"));
+
+      /**
+       * 解析Mapper,重要
+       */
       mapperElement(root.evalNode("mappers"));
     } catch (Exception e) {
       throw new BuilderException("Error parsing SQL Mapper Configuration. Cause: " + e, e);
     }
   }
 
+
+  /**
+   * <settings>
+   *   <setting name="cacheEnabled" value="true"/>
+   *   <setting name="lazyLoadingEnabled" value="true"/>
+   *   <setting name="multipleResultSetsEnabled" value="true"/>
+   *   <setting name="useColumnLabel" value="true"/>
+   *   <setting name="useGeneratedKeys" value="false"/>
+   *   <setting name="autoMappingBehavior" value="PARTIAL"/>
+   *   <setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>
+   *   <setting name="defaultExecutorType" value="SIMPLE"/>
+   *   <setting name="defaultStatementTimeout" value="25"/>
+   *   <setting name="defaultFetchSize" value="100"/>
+   *   <setting name="safeRowBoundsEnabled" value="false"/>
+   *   <setting name="mapUnderscoreToCamelCase" value="false"/>
+   *   <setting name="localCacheScope" value="SESSION"/>
+   *   <setting name="jdbcTypeForNull" value="OTHER"/>
+   *   <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/>
+   * </settings>
+   * @param context
+   * @return
+   */
   private Properties settingsAsProperties(XNode context) {
     if (context == null) {
       return new Properties();
@@ -151,6 +195,24 @@ public class XMLConfigBuilder extends BaseBuilder {
     }
   }
 
+  /**
+   * <typeAliases>
+   *   <typeAlias alias="Author" type="domain.blog.Author"/>
+   *   <typeAlias alias="Blog" type="domain.blog.Blog"/>
+   *   <typeAlias alias="Comment" type="domain.blog.Comment"/>
+   *   <typeAlias alias="Post" type="domain.blog.Post"/>
+   *   <typeAlias alias="Section" type="domain.blog.Section"/>
+   *   <typeAlias alias="Tag" type="domain.blog.Tag"/>
+   * </typeAliases>
+   *
+   *
+   * <typeAliases>
+   *   <package name="domain.blog"/>
+   * </typeAliases>
+   *
+   *
+   * @param parent
+   */
   private void typeAliasesElement(XNode parent) {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
@@ -175,12 +237,27 @@ public class XMLConfigBuilder extends BaseBuilder {
     }
   }
 
+  /**
+   * <plugins>
+   *   <plugin interceptor="org.mybatis.example.ExamplePlugin">
+   *     <property name="someProperty" value="100"/>
+   *   </plugin>
+   * </plugins>
+   *
+   * @param parent
+   * @throws Exception
+   */
   private void pluginElement(XNode parent) throws Exception {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
         String interceptor = child.getStringAttribute("interceptor");
+        // plugin---->  properties
         Properties properties = child.getChildrenAsProperties();
+
+
         Interceptor interceptorInstance = (Interceptor) resolveClass(interceptor).newInstance();
+
+        //
         interceptorInstance.setProperties(properties);
         configuration.addInterceptor(interceptorInstance);
       }
@@ -213,8 +290,20 @@ public class XMLConfigBuilder extends BaseBuilder {
     }
   }
 
+  /**
+   * <properties resource="org/mybatis/example/config.properties">
+   *   <property name="username" value="dev_user"/>
+   *   <property name="password" value="F2Fa3!33TYyg"/>
+   * </properties>
+   *
+   * @param context
+   * @throws Exception
+   */
   private void propertiesElement(XNode context) throws Exception {
     if (context != null) {
+      /**
+       * 获取一级子节点中name和value属性,组装返回properties
+       */
       Properties defaults = context.getChildrenAsProperties();
       String resource = context.getStringAttribute("resource");
       String url = context.getStringAttribute("url");
@@ -268,6 +357,26 @@ public class XMLConfigBuilder extends BaseBuilder {
     configuration.setConfigurationFactory(resolveClass(props.getProperty("configurationFactory")));
   }
 
+
+  /**
+   * <environments default="development">
+   *   <environment id="development">
+   *     <transactionManager type="JDBC">
+   *       <property name="..." value="..."/>
+   *     </transactionManager>
+   *     <dataSource type="POOLED">
+   *       <property name="driver" value="${driver}"/>
+   *       <property name="url" value="${url}"/>
+   *       <property name="username" value="${username}"/>
+   *       <property name="password" value="${password}"/>
+   *     </dataSource>
+   *   </environment>
+   * </environments>
+   *
+   *
+   * @param context
+   * @throws Exception
+   */
   private void environmentsElement(XNode context) throws Exception {
     if (context != null) {
       if (environment == null) {
@@ -356,6 +465,35 @@ public class XMLConfigBuilder extends BaseBuilder {
     }
   }
 
+  /**
+   * <!-- 使用相对于类路径的资源引用 -->
+   * <mappers>
+   *   <mapper resource="org/mybatis/builder/AuthorMapper.xml"/>
+   *   <mapper resource="org/mybatis/builder/BlogMapper.xml"/>
+   *   <mapper resource="org/mybatis/builder/PostMapper.xml"/>
+   * </mappers>
+   *
+   * <!-- 使用完全限定资源定位符（URL） -->
+   * <mappers>
+   *   <mapper url="file:///var/mappers/AuthorMapper.xml"/>
+   *   <mapper url="file:///var/mappers/BlogMapper.xml"/>
+   *   <mapper url="file:///var/mappers/PostMapper.xml"/>
+   * </mappers>
+   *
+   * <!-- 使用映射器接口实现类的完全限定类名 -->
+   * <mappers>
+   *   <mapper class="org.mybatis.builder.AuthorMapper"/>
+   *   <mapper class="org.mybatis.builder.BlogMapper"/>
+   *   <mapper class="org.mybatis.builder.PostMapper"/>
+   * </mappers>
+   *
+   * <!-- 将包内的映射器接口实现全部注册为映射器 -->
+   * <mappers>
+   *   <package name="org.mybatis.builder"/>
+   * </mappers>
+   * @param parent
+   * @throws Exception
+   */
   private void mapperElement(XNode parent) throws Exception {
     if (parent != null) {
       for (XNode child : parent.getChildren()) {
