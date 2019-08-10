@@ -63,6 +63,10 @@ public class PropertyParser {
    *   key1   返回    ${key}
    */
   private static class VariableTokenHandler implements TokenHandler {
+
+    /**
+     * 保存将要替换到长文本中的key-value集合
+     */
     private final Properties variables;
     private final boolean enableDefaultValue;
     private final String defaultValueSeparator;

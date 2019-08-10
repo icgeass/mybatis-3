@@ -28,6 +28,8 @@ import org.w3c.dom.NodeList;
 
 /**
  * @author Clinton Begin
+ *
+ * 封装了XPath里面的Node，配合XPathParser使用
  */
 public class XNode {
 

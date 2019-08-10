@@ -43,7 +43,7 @@ import org.xml.sax.SAXParseException;
  * @author Clinton Begin
  *
  *
- * 封装XPath,读取xml节点或属性
+ * 封装XPath,读取xml节点或属性，每个实例构造传入Document，解析时直接使用
  */
 public class XPathParser {
 

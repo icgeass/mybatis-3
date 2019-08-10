@@ -24,6 +24,13 @@ public class GenericTokenParser {
   private final String closeToken;
   private final TokenHandler handler;
 
+
+  /**
+   * handler里面保存了用于保存占位变量的key-value集合，用于解析占位符表达式
+   * @param openToken
+   * @param closeToken
+   * @param handler
+   */
   public GenericTokenParser(String openToken, String closeToken, TokenHandler handler) {
     this.openToken = openToken;
     this.closeToken = closeToken;
@@ -32,7 +39,8 @@ public class GenericTokenParser {
 
 
   /**
-   * 将长文本中的若干属性替换为对应值,属性用${}包裹起来
+   * 将长文本中的若干属性替换为对应值,属性用${}包裹起来，
+   * 主要逻辑是查找占位，使用handler取对应key的value
    * 详细见
    * org.apache.ibatis.parsing.GenericTokenParserTest
    * @param text
