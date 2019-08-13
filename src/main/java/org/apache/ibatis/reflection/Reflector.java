@@ -93,6 +93,7 @@ public class Reflector {
   }
 
   private void addGetMethods(Class<?> cls) {
+    // 一个方法名对应了多个Method
     Map<String, List<Method>> conflictingGetters = new HashMap<String, List<Method>>();
     Method[] methods = getClassMethods(cls);
     for (Method method : methods) {
@@ -109,6 +110,11 @@ public class Reflector {
     resolveGetterConflicts(conflictingGetters);
   }
 
+
+  /**
+   * 对于冲突的方法，仅保留子类的方法
+   * @param conflictingGetters
+   */
   private void resolveGetterConflicts(Map<String, List<Method>> conflictingGetters) {
     for (Entry<String, List<Method>> entry : conflictingGetters.entrySet()) {
       Method winner = null;
@@ -121,6 +127,7 @@ public class Reflector {
         Class<?> winnerType = winner.getReturnType();
         Class<?> candidateType = candidate.getReturnType();
         if (candidateType.equals(winnerType)) {
+          // TODO 没看懂这句
           if (!boolean.class.equals(candidateType)) {
             throw new ReflectionException(
                 "Illegal overloaded getter method with ambiguous type for property "
@@ -152,6 +159,11 @@ public class Reflector {
     }
   }
 
+
+  /**
+   * 与添加Get方法类似
+   * @param cls
+   */
   private void addSetMethods(Class<?> cls) {
     Map<String, List<Method>> conflictingSetters = new HashMap<String, List<Method>>();
     Method[] methods = getClassMethods(cls);
@@ -167,6 +179,12 @@ public class Reflector {
     resolveSetterConflicts(conflictingSetters);
   }
 
+  /**
+   * 方法名和方法的集合---------由于包含接口和父类的方法，所以一个方法名可能对应了多个方法，所以是addMethodConflict
+   * @param conflictingMethods
+   * @param name
+   * @param method
+   */
   private void addMethodConflict(Map<String, List<Method>> conflictingMethods, String name, Method method) {
     List<Method> list = conflictingMethods.get(name);
     if (list == null) {
@@ -231,6 +249,12 @@ public class Reflector {
     }
   }
 
+
+  /**
+   * 将Type类型装换为数组
+   * @param src
+   * @return
+   */
   private Class<?> typeToClass(Type src) {
     Class<?> result = null;
     if (src instanceof Class) {
@@ -242,6 +266,7 @@ public class Reflector {
       if (componentType instanceof Class) {
         result = Array.newInstance((Class<?>) componentType, 0).getClass();
       } else {
+        // 可能存在多维数组
         Class<?> componentClass = typeToClass(componentType);
         result = Array.newInstance((Class<?>) componentClass, 0).getClass();
       }
@@ -310,6 +335,14 @@ public class Reflector {
    *
    * @param cls The class
    * @return An array containing all methods in this class
+   *
+   *
+   */
+
+  /**
+   * 得到所有的方法，包括接口，直接和间接父类
+   * @param cls
+   * @return
    */
   private Method[] getClassMethods(Class<?> cls) {
     Map<String, Method> uniqueMethods = new HashMap<String, Method>();
@@ -332,6 +365,16 @@ public class Reflector {
     return methods.toArray(new Method[methods.size()]);
   }
 
+
+  /**
+   * 遍历方法，将非桥接方法（https://www.zhihu.com/question/54895701）按
+   *
+   * 签名（由getSignature生成）-Method
+   *
+   * 的方式放入map
+   * @param uniqueMethods
+   * @param methods
+   */
   private void addUniqueMethods(Map<String, Method> uniqueMethods, Method[] methods) {
     for (Method currentMethod : methods) {
       if (!currentMethod.isBridge()) {
@@ -354,6 +397,16 @@ public class Reflector {
     }
   }
 
+
+  /**
+   * 生成方法签名
+   *
+   * 方法签名格式：
+   *
+   * void#addMethodConflict:java.util.Map,java.lang.String,java.lang.reflect.Method
+   * @param method
+   * @return
+   */
   private String getSignature(Method method) {
     StringBuilder sb = new StringBuilder();
     Class<?> returnType = method.getReturnType();
@@ -384,6 +437,12 @@ public class Reflector {
     }
     return true;
   }
+
+
+  /**
+   * =======================================以下为对外获取相关信息方法=====================================================
+   * @return
+   */
 
   /*
    * Gets the name of the class the instance provides information for

@@ -32,7 +32,7 @@ public class PropertyTokenizer implements Iterator<PropertyTokenizer> {
    * 如果第一个.
    * 则
    * name----orders
-   * indexedNmae-----orders[0]
+   * indexedName-----orders[0]
    * index------0
    * children--------item[0].name
    *

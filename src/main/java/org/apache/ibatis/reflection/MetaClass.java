@@ -49,11 +49,24 @@ public class MetaClass {
     return new MetaClass(type, reflectorFactory);
   }
 
+  /**
+   * 获取指定属性声明类型的MetaClass
+   */
   public MetaClass metaClassForProperty(String name) {
     Class<?> propType = reflector.getGetterType(name);
     return MetaClass.forClass(propType, reflectorFactory);
   }
 
+
+  /**
+   * 将属性导航转换为对象实际有的属性导航，
+   * 如：type.FIeld1.fielD2------> type.field1.field2
+   *
+   * 不转换下标，如：
+   * type.list[0] --->  type. (因为type中没有list[0]这个字段，只有list这个字段)
+   * @param name
+   * @return
+   */
   public String findProperty(String name) {
     StringBuilder prop = buildProperty(name, new StringBuilder());
     return prop.length() > 0 ? prop.toString() : null;
@@ -74,6 +87,11 @@ public class MetaClass {
     return reflector.getSetablePropertyNames();
   }
 
+  /**
+   * prop1[0].prop2.prop3------返回prop3的类型
+   * @param name
+   * @return
+   */
   public Class<?> getSetterType(String name) {
     PropertyTokenizer prop = new PropertyTokenizer(name);
     if (prop.hasNext()) {
@@ -99,6 +117,7 @@ public class MetaClass {
     return MetaClass.forClass(propType, reflectorFactory);
   }
 
+  // TODO 暂不看
   private Class<?> getGetterType(PropertyTokenizer prop) {
     Class<?> type = reflector.getGetterType(prop.getName());
     if (prop.getIndex() != null && Collection.class.isAssignableFrom(type)) {

@@ -17,7 +17,7 @@ package org.apache.ibatis.reflection;
 
 
 /**
- * 缓存所有类的Reflector
+ * 缓存所有类的Reflector，默认实现DefaultReflectorFactory
  */
 public interface ReflectorFactory {
 

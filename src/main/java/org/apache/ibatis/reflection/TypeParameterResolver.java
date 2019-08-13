@@ -27,6 +27,12 @@ import java.util.Arrays;
 
 /**
  * @author Iwao AVE!
+ *
+ *
+ * 目前都是调用resolveFieldType，resolveReturnType，resolveParamTypes这三个方法，
+ *
+ * 实际调用传入的srcType都是Class（Type的子类）
+ *
  */
 public class TypeParameterResolver {
 
@@ -63,6 +69,15 @@ public class TypeParameterResolver {
     }
     return result;
   }
+
+
+  /**
+   * ================================================以下方法私有=================================================
+   * @param type
+   * @param srcType
+   * @param declaringClass
+   * @return
+   */
 
   private static Type resolveType(Type type, Type srcType, Class<?> declaringClass) {
     if (type instanceof TypeVariable) {
