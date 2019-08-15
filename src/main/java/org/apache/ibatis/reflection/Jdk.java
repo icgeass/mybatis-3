@@ -25,6 +25,7 @@ public class Jdk {
 
   /**
    * <code>true</code> if <code>java.lang.reflect.Parameter</code> is available.
+   * 用于获取实际参数名（和编译生成的class文件有关）
    */
   public static final boolean parameterExists;
 
@@ -39,6 +40,9 @@ public class Jdk {
     parameterExists = available;
   }
 
+  /**
+   * 是否存在java8时间api，用于注册java8时间类型到数据库类型映射
+   */
   public static final boolean dateAndTimeApiExists;
 
   static {

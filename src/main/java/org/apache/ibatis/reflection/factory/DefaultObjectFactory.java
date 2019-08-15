@@ -32,6 +32,11 @@ import org.apache.ibatis.reflection.ReflectionException;
 
 /**
  * @author Clinton Begin
+ *
+ * 对象工厂，和反射工厂相比没有缓存
+ * 因为类信息不变且容易共享，而对象不是
+ *
+ *
  */
 public class DefaultObjectFactory implements ObjectFactory, Serializable {
 

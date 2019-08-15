@@ -35,6 +35,11 @@ public class ParamNameUtil {
     return getParameterNames(constructor);
   }
 
+  /**
+   * 依赖于Jvm实现（生成的class），如果class里面没有实际字段名信息，则返回argN
+   * @param executable
+   * @return
+   */
   private static List<String> getParameterNames(Executable executable) {
     final List<String> names = new ArrayList<String>();
     final Parameter[] params = executable.getParameters();

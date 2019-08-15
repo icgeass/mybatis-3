@@ -40,8 +40,8 @@ public class PropertyTokenizer implements Iterator<PropertyTokenizer> {
    * 最后一次分割,name和indexedName相等
    */
   private String name;
-  private final String indexedName;
-  private String index;
+  private final String indexedName; // 默认和name相同（children为null时）
+  private String index; // 默认为null
   private final String children;
 
   public PropertyTokenizer(String fullname) {

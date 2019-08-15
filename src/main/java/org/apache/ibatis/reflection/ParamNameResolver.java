@@ -47,12 +47,18 @@ public class ParamNameResolver {
    * <li>aMethod(int a, RowBounds rb, int b) -&gt; {{0, "0"}, {2, "1"}}</li>
    * </ul>
    */
+
+  /**
+   * key---参数下标
+   * value----依次param注解对应值，真实参数名，argN，下标字符串
+   */
   private final SortedMap<Integer, String> names;
 
   private boolean hasParamAnnotation;
 
   public ParamNameResolver(Configuration config, Method method) {
     final Class<?>[] paramTypes = method.getParameterTypes();
+    // 一个参数可能有多个注解，一个方法有多个参数，所以返回二维数组
     final Annotation[][] paramAnnotations = method.getParameterAnnotations();
     final SortedMap<Integer, String> map = new TreeMap<Integer, String>();
     int paramCount = paramAnnotations.length;
@@ -63,6 +69,7 @@ public class ParamNameResolver {
         continue;
       }
       String name = null;
+      // 获取第paramIndex个参数的Param注解值
       for (Annotation annotation : paramAnnotations[paramIndex]) {
         if (annotation instanceof Param) {
           hasParamAnnotation = true;
@@ -114,6 +121,13 @@ public class ParamNameResolver {
    *
    * 接收的参数是用户传入的实参列表，并将实参与其对应名
    * 称进行关联
+   *
+   * 如果是单个并且没有param注解：
+   * 返回该参数值
+   *
+   * 如果是多个：
+   * key----参数名（依次param注解对应值，真实参数名，argN，下标字符串）
+   * value----参数真实值
    */
   public Object getNamedParams(Object[] args) {
     final int paramCount = names.size();

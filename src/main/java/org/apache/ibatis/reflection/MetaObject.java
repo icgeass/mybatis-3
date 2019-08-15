@@ -29,12 +29,24 @@ import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
 
 /**
  * @author Clinton Begin
+ *
+ * 反射的核心类
+ *
+ *
+ * MetaObject主要包含
+ * 当前对象
+ * 反射工厂（Reflector---类信息）
+ * 对象工厂（创建对象）
+ * ObjectWrapper（用户操作对象，使用.导航）
+ *
+ *
  */
 public class MetaObject {
 
   private final Object originalObject;
   private final ObjectWrapper objectWrapper;
   private final ObjectFactory objectFactory;
+  // 目前没有使用
   private final ObjectWrapperFactory objectWrapperFactory;
   private final ReflectorFactory reflectorFactory;
 
@@ -109,6 +121,12 @@ public class MetaObject {
     return objectWrapper.hasGetter(name);
   }
 
+
+  /**
+   * prop1.prop2.prop3----递归获取属性
+   * @param name
+   * @return
+   */
   public Object getValue(String name) {
     PropertyTokenizer prop = new PropertyTokenizer(name);
     if (prop.hasNext()) {
@@ -123,10 +141,19 @@ public class MetaObject {
     }
   }
 
+  /**
+   * 属性名（带.导航）-------属性值
+   *
+   * 不用传入原始对象，因为已经保存在ObjectWrapper中了（在构造MetaObject的时候传入）
+   * @param name
+   * @param value
+   */
   public void setValue(String name, Object value) {
     PropertyTokenizer prop = new PropertyTokenizer(name);
     if (prop.hasNext()) {
+      // 获取.导航对应的属性对象字段
       MetaObject metaValue = metaObjectForProperty(prop.getIndexedName());
+      // 如果.导航的属性为null
       if (metaValue == SystemMetaObject.NULL_META_OBJECT) {
         if (value == null && prop.getChildren() != null) {
           // don't instantiate child path if value is null
