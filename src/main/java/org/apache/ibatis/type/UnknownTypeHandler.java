@@ -84,6 +84,7 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
 
   private TypeHandler<?> resolveTypeHandler(ResultSet rs, String column) {
     try {
+      // 查找列名对应的index
       Map<String,Integer> columnIndexLookup;
       columnIndexLookup = new HashMap<String,Integer>();
       ResultSetMetaData rsmd = rs.getMetaData();
@@ -92,6 +93,7 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
         String name = rsmd.getColumnName(i);
         columnIndexLookup.put(name,i);
       }
+      // 通过index查找TypeHandler
       Integer columnIndex = columnIndexLookup.get(column);
       TypeHandler<?> handler = null;
       if (columnIndex != null) {
@@ -120,6 +122,12 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
     return handler;
   }
 
+  /**
+   * 通过Jdbc获取Jdbc类型
+   * @param rsmd
+   * @param columnIndex
+   * @return
+   */
   private JdbcType safeGetJdbcTypeForColumn(ResultSetMetaData rsmd, Integer columnIndex) {
     try {
       return JdbcType.forCode(rsmd.getColumnType(columnIndex));
@@ -128,6 +136,12 @@ public class UnknownTypeHandler extends BaseTypeHandler<Object> {
     }
   }
 
+  /**
+   * 通过jdbc获取Java类型
+   * @param rsmd
+   * @param columnIndex
+   * @return
+   */
   private Class<?> safeGetClassForColumn(ResultSetMetaData rsmd, Integer columnIndex) {
     try {
       return Resources.classForName(rsmd.getColumnClassName(columnIndex));

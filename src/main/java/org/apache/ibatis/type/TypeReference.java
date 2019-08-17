@@ -25,6 +25,11 @@ import java.lang.reflect.Type;
  * @since 3.1.0
  * @author Simone Tripodi
  */
+
+/**
+ * 用于获取泛型类型
+ * @param <T>
+ */
 public abstract class TypeReference<T> {
 
   private final Type rawType;

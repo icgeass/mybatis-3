@@ -75,6 +75,13 @@ public final class TypeHandlerRegistry {
 
   private Class<? extends TypeHandler> defaultEnumTypeHandler = EnumTypeHandler.class;
 
+
+  /**
+   * 分为3类
+   * 1，注册JdbcType和handler，往JDBC_TYPE_HANDLER_MAP放key-value即可
+   * 2，注册JavaType，TypeHandler，没有指定JdbcType，注册之后该JavaType对应的Jdbc-Handler的key为null
+   * 3，同2，注册指定JdbcType，对应key为传入值
+   */
   public TypeHandlerRegistry() {
     register(Boolean.class, new BooleanTypeHandler());
     register(boolean.class, new BooleanTypeHandler());
@@ -227,6 +234,14 @@ public final class TypeHandlerRegistry {
     return getTypeHandler(javaTypeReference.getRawType(), jdbcType);
   }
 
+
+  /**
+   * 重要，获取TypeHandler的方法
+   * @param type
+   * @param jdbcType
+   * @param <T>
+   * @return
+   */
   @SuppressWarnings("unchecked")
   private <T> TypeHandler<T> getTypeHandler(Type type, JdbcType jdbcType) {
     if (ParamMap.class.equals(type)) {
@@ -235,6 +250,7 @@ public final class TypeHandlerRegistry {
     Map<JdbcType, TypeHandler<?>> jdbcHandlerMap = getJdbcHandlerMap(type);
     TypeHandler<?> handler = null;
     if (jdbcHandlerMap != null) {
+      // 按指定JdbcType查找，如果找不到，则查找JdbcType为null的，还是找不到则在jdbcHandlerMap.size=1时候取一个TypeHandler
       handler = jdbcHandlerMap.get(jdbcType);
       if (handler == null) {
         handler = jdbcHandlerMap.get(null);
