@@ -216,6 +216,9 @@ public class DefaultVFS extends VFS {
    * @param url The URL of the JAR entry.
    * @return The URL of the JAR file, if one is found. Null if not.
    * @throws MalformedURLException
+   *
+   * 用于检测指定URL对应的jar是否是合法的jar，是则返回原URL，否则返回null
+   *
    */
   protected URL findJarForResource(URL url) throws MalformedURLException {
     if (log.isDebugEnabled()) {

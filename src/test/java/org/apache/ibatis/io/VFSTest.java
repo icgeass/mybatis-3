@@ -31,6 +31,14 @@ public class VFSTest {
     Assert.assertNotNull(vsf);
   }
 
+
+  @Test
+  public void testDefaultVFS() throws Exception {
+    DefaultVFS defaultVFS = new DefaultVFS();
+    System.out.println(defaultVFS.list("com"));
+  }
+
+
   @Test
   public void getInstanceShouldNotBeNullInMultiThreadEnv() throws InterruptedException {
     final int threadCount = 3;
