@@ -20,6 +20,10 @@ package org.apache.ibatis.logging;
  *
  * 对外接口,实现类通过持有具体日志类,提供日志服务
  *
+ *
+ *
+ * 将三方日志都适配成该接口
+ *
  */
 public interface Log {
 
