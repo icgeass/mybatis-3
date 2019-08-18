@@ -44,7 +44,9 @@ public class ResourcesTest extends BaseDataTest {
   @Test
   public void testGetProperties() throws Exception{
     String s = "org/apache/ibatis/io/test.properties";
-    Properties properties = Resources.getResourceAsProperties("org/apache/ibatis/io/test.properties");
+    Properties properties = Resources.getResourceAsProperties(s);
+    Thread.currentThread().getContextClassLoader().getResource(s);
+    Thread.currentThread().getContextClassLoader().getResources(s);
     System.out.println(properties);
 
 
