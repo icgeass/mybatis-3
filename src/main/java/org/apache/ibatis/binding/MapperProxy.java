@@ -36,7 +36,7 @@ import org.apache.ibatis.session.SqlSession;
  * 一般的代理会在invoke中调用实际被代理的对象realObject（构造传入），但是MapperProxy没有，
  * 因为用户定义的Mapper接口本来就没有实现类
  *
- * MapperProxy使用动态代理仅仅是为了
+ * MapperProxy使用动态代理仅仅是为了生成接口的实现类，而实现都是由MapperMethod执行的
  */
 public class MapperProxy<T> implements InvocationHandler, Serializable {
 

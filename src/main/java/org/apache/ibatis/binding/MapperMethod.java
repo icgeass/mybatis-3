@@ -43,7 +43,7 @@ import java.util.*;
 public class MapperMethod {
 
   /**
-   * 记录了SQL语句的名称和类
+   * 记录了SQL语句的名称（mapper.xml中sql的id）和类
    * 型
    */
   private final SqlCommand command;
@@ -63,6 +63,9 @@ public class MapperMethod {
   /**
    * sqlSession执行
    * 然后处理结果
+   *
+   * 该方法可以处理所有Mapper接口的方法
+   *
    * @param sqlSession
    * @param args
    * @return
@@ -312,6 +315,7 @@ public class MapperMethod {
       this.returnsVoid = void.class.equals(this.returnType);
       this.returnsMany = configuration.getObjectFactory().isCollection(this.returnType) || this.returnType.isArray();
       this.returnsCursor = Cursor.class.equals(this.returnType);
+      // 返回类型是Map时，m获取mapkey注解
       this.mapKey = getMapKey(method);
       this.returnsMap = this.mapKey != null;
       this.rowBoundsIndex = getUniqueParamIndex(method, RowBounds.class);

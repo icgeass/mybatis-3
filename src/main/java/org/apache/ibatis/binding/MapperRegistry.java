@@ -35,6 +35,8 @@ import java.util.Set;
  * 一个Mapper接口------一个MapperProxyFactory
  *
  *
+ * MapperRegistry关联所有Mapper接口的MapperProxyFactory
+ *
  */
 public class MapperRegistry {
 
