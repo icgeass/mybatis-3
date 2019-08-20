@@ -25,6 +25,11 @@ import org.apache.ibatis.cache.Cache;
  * Lru (least recently used) cache decorator
  *
  * @author Clinton Begin
+ *
+ * 利用LinkedHashMap重写removeEldestEntry维护keyMap实现
+ *
+ *
+ *
  */
 public class LruCache implements Cache {
 

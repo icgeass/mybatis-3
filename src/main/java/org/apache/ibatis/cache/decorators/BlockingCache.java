@@ -30,6 +30,10 @@ import org.apache.ibatis.cache.CacheException;
  * Simple and inefficient version of EhCache's BlockingCache decorator.
  * It sets a lock over a cache key when the element is not found in cache.
  * This way, other threads will wait until this element is filled instead of hitting the database.
+ *
+ *
+ *
+ * 在读写时加锁，只针对于get或put时（对于获取之后不加锁）
  * 
  * @author Eduardo Macarron
  *

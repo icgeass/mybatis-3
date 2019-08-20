@@ -23,6 +23,9 @@ import org.apache.ibatis.logging.LogFactory;
 
 /**
  * @author Clinton Begin
+ *
+ * 在get时使用命中率统计
+ *
  */
 public class LoggingCache implements Cache {
 

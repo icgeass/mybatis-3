@@ -24,12 +24,22 @@ import org.apache.ibatis.cache.Cache;
 /**
  * FIFO (first in, first out) cache decorator
  *
+ *
+ * 实现先入，先出的缓存，装饰Cache接口
+ *
+ * 原理，在put时如果大于最大值size，则移除队列首部对应的缓存，同时更新keyList
+ *
+ *
+ *
  * @author Clinton Begin
  */
 public class FifoCache implements Cache {
 
+  // 被装饰对象，也可能是装饰器
   private final Cache delegate;
+  // 记录key，用于超过大小时，从队首移除缓存对象
   private final Deque<Object> keyList;
+  // 缓存最大大小
   private int size;
 
   public FifoCache(Cache delegate) {
