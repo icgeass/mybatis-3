@@ -91,6 +91,10 @@ import org.apache.ibatis.type.UnknownTypeHandler;
 
 /**
  * @author Clinton Begin
+ *
+ *
+ *
+ * 一个实例对应只解析一个类
  */
 public class MapperAnnotationBuilder {
 

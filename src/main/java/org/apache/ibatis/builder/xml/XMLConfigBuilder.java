@@ -50,6 +50,10 @@ import org.apache.ibatis.type.TypeHandler;
 /**
  * @author Clinton Begin
  * @author Kazuki Shimizu
+ *
+ *
+ *
+ *
  */
 public class XMLConfigBuilder extends BaseBuilder {
 
@@ -131,6 +135,9 @@ public class XMLConfigBuilder extends BaseBuilder {
       ////
       settingsElement(settings);
       // read it after objectFactory and objectWrapperFactory issue #631
+      /**
+       * 设置当前环境
+       */
       environmentsElement(root.evalNode("environments"));
       databaseIdProviderElement(root.evalNode("databaseIdProvider"));
       typeHandlerElement(root.evalNode("typeHandlers"));
@@ -397,6 +404,17 @@ public class XMLConfigBuilder extends BaseBuilder {
     }
   }
 
+  /**
+   *
+   * name指定了数据库产品名，从dataSource中的元数据读取，匹配name，然后确定使用哪个sql_id
+   * <databaseIdProvider type="DB_VENDOR">
+   *   <property name="SQL Server" value="sqlserver"/>
+   *   <property name="DB2" value="db2"/>
+   *   <property name="Oracle" value="oracle" />
+   * </databaseIdProvider>
+   * @param context
+   * @throws Exception
+   */
   private void databaseIdProviderElement(XNode context) throws Exception {
     DatabaseIdProvider databaseIdProvider = null;
     if (context != null) {
@@ -407,6 +425,7 @@ public class XMLConfigBuilder extends BaseBuilder {
       }
       Properties properties = context.getChildrenAsProperties();
       databaseIdProvider = (DatabaseIdProvider) resolveClass(type).newInstance();
+      // 这里传入了数据库名和对应的sql id
       databaseIdProvider.setProperties(properties);
     }
     Environment environment = configuration.getEnvironment();

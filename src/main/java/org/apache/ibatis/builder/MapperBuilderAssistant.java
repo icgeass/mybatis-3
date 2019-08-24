@@ -137,6 +137,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
         .blocking(blocking)
         .properties(props)
         .build();
+    // build方法构造装饰器
     configuration.addCache(cache);
     currentCache = cache;
     return cache;

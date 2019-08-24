@@ -49,6 +49,10 @@ import org.apache.ibatis.type.TypeHandler;
 
 /**
  * @author Clinton Begin
+ *
+ * 一个XMLMapperBuilder实例只解析一个类
+ *
+ *
  */
 public class XMLMapperBuilder extends BaseBuilder {
 
@@ -394,6 +398,7 @@ public class XMLMapperBuilder extends BaseBuilder {
     }
     return null;
   }
+
 
   private void bindMapperForNamespace() {
     String namespace = builderAssistant.getCurrentNamespace();

@@ -29,6 +29,16 @@ import javax.sql.DataSource;
  */
 public interface DatabaseIdProvider {
 
+  /**
+   * 这个properties是databaseIdProvider下面的properties
+   *
+   * <databaseIdProvider type="DB_VENDOR">
+   *   <property name="SQL Server" value="sqlserver"/>
+   *   <property name="DB2" value="db2"/>
+   *   <property name="Oracle" value="oracle" />
+   * </databaseIdProvider>
+   * @param p
+   */
   void setProperties(Properties p);
 
   String getDatabaseId(DataSource dataSource) throws SQLException;
