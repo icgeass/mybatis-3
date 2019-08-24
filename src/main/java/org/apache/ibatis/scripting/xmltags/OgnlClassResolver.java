@@ -30,6 +30,9 @@ import org.apache.ibatis.io.Resources;
  * @author Daniel Guggi 
  *
  * @see <a href='https://github.com/mybatis/mybatis-3/issues/161'>Issue 161</a>
+ *
+ *
+ * 缓存class for name
  */
 public class OgnlClassResolver implements ClassResolver {
 

@@ -37,7 +37,12 @@ public class TextSqlNode implements SqlNode {
     this.text = text;
     this.injectionFilter = injectionFilter;
   }
-  
+
+
+  /**
+   * 利用解析判断是否是动态节点
+   * @return
+   */
   public boolean isDynamic() {
     DynamicCheckerTokenParser checker = new DynamicCheckerTokenParser();
     GenericTokenParser parser = createParser(checker);
